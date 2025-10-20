@@ -89,6 +89,13 @@ project/
 - 使用高斯模糊去除雜訊
 - 優化影像前處理流程
 
+鏡頭原畫面
+project/image/Original.png
+高斯模糊
+project/image/Gaussian＿Blur.png
+二值化
+project/image/Binarization.png
+
 ### 3. 即時性要求
 **挑戰**：需要同時處理影像辨識、顯示控制、馬達運轉
 **解決方案**：採用多執行緒架構，確保各模組獨立運行不互相干擾
