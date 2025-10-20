@@ -88,13 +88,12 @@ project/
 - 應用二值化增強對比
 - 使用高斯模糊去除雜訊
 - 優化影像前處理流程
+## 圖像處理流程展示
 
-鏡頭原畫面
-project/image/Original.png
-高斯模糊
-project/image/Gaussian＿Blur.png
-二值化
-project/image/Binarization.png
+| 鏡頭原畫面 | 高斯模糊 | 二值化 |
+|-------------|-----------|--------|
+| ![鏡頭原畫面](image/Original.png) | ![高斯模糊](image/Gaussian_Blur.png) | ![二值化](image/Binarization.png) |
+
 
 ### 3. 即時性要求
 **挑戰**：需要同時處理影像辨識、顯示控制、馬達運轉
