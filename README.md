@@ -1,39 +1,150 @@
-# Smart Microwave Oven
+# AI智慧微波爐系統 (Smart Microwave Oven)
 
-> A smart microwave oven application integrating machine learning models for intelligent cooking and user interaction.
+## 專案背景
 
----
+這個專案源自疫情期間，觀察到許多學生在使用福利社微波爐後直接食用，而多人頻繁觸碰的按鈕增加了疫情傳播的風險。為了解決這個問題，我們開發了AI智慧微波爐，利用影像辨識技術辨識食材包裝上的數字，取代觸控輸入，實現「對準鏡頭→顯示時間→一鍵啟動」的無接觸操作流程。
 
-### ✨ Features
+## 系統特色
 
-- (Describe feature 1)
-- (Describe feature 2)
-- (Describe feature 3)
+- **無接觸操作**：透過影像辨識取代觸控按鈕，降低病毒傳播風險
+- **AI數字辨識**：使用機器學習模型辨識食材包裝上的數字
+- **硬體整合**：基於Raspberry Pi的完整硬體控制系統
+- **OLED顯示**：即時顯示辨識結果和系統狀態
+- **馬達控制**：精確控制微波爐轉盤旋轉
 
----
+## 技術架構
 
-### 🛠️ Tech Stack
+### 硬體平台
+- **主控制器**：Raspberry Pi
+- **攝像頭**：用於影像擷取和數字辨識
+- **OLED顯示器**：128x32像素顯示屏 (SSD1306)
+- **步進馬達**：控制微波爐轉盤旋轉
+- **GPIO控制**：多個GPIO腳位控制各種硬體元件
 
-- (List technologies used, e.g., Python, Flask, TensorFlow, etc.)
+### 軟體架構
+- **深度學習**：TensorFlow/Keras MNIST數字辨識模型
+- **影像處理**：OpenCV進行影像前處理（灰階化、二值化、高斯模糊）
+- **多執行緒**：確保攝像頭和馬達控制的即時性
+- **硬體控制**：GPIO控制LED、按鈕、馬達等元件
 
----
+## 專案結構
 
-### 🚀 Getting Started
-
-**1. Clone the repository:**
-```bash
-git clone https://github.com/masddffee/Smart-microwave-oven.git
-cd Smart-microwave-oven
+```
+project/
+├── app/                    # 主要應用程式
+│   ├── main.py            # 主程式入口
+│   ├── webcam.py          # 攝像頭控制模組
+│   └── motor.py           # 馬達控制模組
+├── ml_models/             # 機器學習模型
+│   ├── mnist_model.h5     # Keras模型檔案
+│   ├── mnist_model.keras  # Keras原生格式
+│   ├── mnist_model.tflite # TensorFlow Lite壓縮模型
+│   └── mnist_knn.xml      # KNN模型配置
+├── assets/                # 資源檔案
+│   ├── Consolas.ttf       # 字型檔案
+│   └── consolaz.ttf       # 字型檔案
+└── tests/                 # 測試程式
+    ├── genm.py            # 模型生成測試
+    ├── kcar.py            # K近鄰測試
+    ├── testcam.py         # 攝像頭測試
+    └── testker.py         # Keras模型測試
 ```
 
-**2. Install dependencies:**
+## 核心功能分析
+
+### 1. 主控制程式 (main.py)
+- **深度學習整合**：載入預訓練的MNIST數字辨識模型
+- **影像處理流程**：
+  - 攝像頭影像擷取
+  - 灰階轉換和預處理
+  - 數字辨識和時間對應
+- **硬體控制**：
+  - OLED顯示器控制
+  - GPIO腳位控制（LED、按鈕、開關）
+  - 馬達旋轉控制
+- **時間映射**：將辨識的數字0-9對應到10-100秒的加熱時間
+
+### 2. 攝像頭模組 (webcam.py)
+- **多執行緒設計**：使用threading確保影像擷取的即時性
+- **OpenCV整合**：透過cv2.VideoCapture進行影像擷取
+- **生命週期管理**：提供open、close、read等完整的攝像頭控制介面
+
+### 3. 馬達控制模組 (motor.py)
+- **步進馬達控制**：28BYJ-48步進馬達的精確控制
+- **8步序列驅動**：實現平滑的正反轉控制
+- **多執行緒運行**：非阻塞式馬達控制
+- **GPIO腳位管理**：4線步進馬達的完整驅動實現
+
+## 技術挑戰與解決方案
+
+### 1. 硬體運算限制
+**挑戰**：Raspberry Pi運算能力有限，無法直接運行完整的深度學習模型
+**解決方案**：將Keras模型壓縮為TensorFlow Lite格式，大幅減少運算需求
+
+### 2. 影像辨識困難
+**挑戰**：字體差異與食材包裝反光造成辨識準確率下降
+**解決方案**：
+- 實施灰階化預處理
+- 應用二值化增強對比
+- 使用高斯模糊去除雜訊
+- 優化影像前處理流程
+
+### 3. 即時性要求
+**挑戰**：需要同時處理影像辨識、顯示控制、馬達運轉
+**解決方案**：採用多執行緒架構，確保各模組獨立運行不互相干擾
+
+## 安裝與使用
+
+### 系統需求
+- Raspberry Pi 3/4
+- Python 3.7+
+- OpenCV
+- TensorFlow/TensorFlow Lite
+- Adafruit_SSD1306 (OLED控制)
+- RPi.GPIO
+
+### 安裝步驟
 ```bash
-# Add instructions here
+# 安裝相依套件
+pip install tensorflow opencv-python pillow adafruit-circuitpython-ssd1306
+
+# 安裝GPIO控制套件
+sudo apt-get install python3-rpi.gpio
+
+# 執行主程式
+cd project/app
+python3 main.py
 ```
 
-**3. Run the application:**
-```bash
-# Add instructions here
-```
+### 操作流程
+1. 啟動系統後，OLED顯示器會顯示等待狀態
+2. 將食物包裝的數字對準攝像頭
+3. 系統自動辨識數字並顯示對應的加熱時間
+4. 按下確認按鈕開始加熱程序
+5. 馬達開始旋轉，系統進入加熱模式
+
+## 技術創新點
+
+1. **疫情防護設計**：專為減少接觸傳播而設計的無觸控介面
+2. **邊緣運算應用**：在資源受限的Raspberry Pi上實現實時AI推論
+3. **模型最佳化**：成功將深度學習模型壓縮部署到嵌入式設備
+4. **多模組整合**：影像處理、機器學習、硬體控制的完美整合
+
+## 未來發展方向
+
+1. **辨識精度提升**：訓練更多樣化的數字辨識模型
+2. **語音控制**：增加語音指令功能
+3. **雲端整合**：連接IoT平台實現遠程監控
+4. **安全機制**：增加過熱保護和安全關機功能
+
+## 貢獻者
+
+專案由團隊合作完成，主要負責影像辨識模組開發與模型部署最佳化。
+
+## 授權
+
+本專案採用MIT授權條款。
 
 ---
+
+*這個專案展示了如何在疫情期間運用技術創新解決實際問題，結合AI、嵌入式系統與硬體控制，創造出既實用又安全的智慧家電解決方案。*
