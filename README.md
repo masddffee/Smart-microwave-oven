@@ -92,7 +92,7 @@ project/
 
 | 鏡頭原畫面 | 高斯模糊 | 二值化 |
 |-------------|-----------|--------|
-| ![鏡頭原畫面](image/Original.png) | ![高斯模糊](image/Gaussian_Blur.png) | ![二值化](image/Binarization.png) |
+| ![鏡頭原畫面]([image/Original.png](https://raw.githubusercontent.com/masddffee/Smart-microwave-oven/main/project/image/Original.png)) | ![高斯模糊]([image/Gaussian_Blur.png](https://raw.githubusercontent.com/masddffee/Smart-microwave-oven/main/project/image/Gaussian_Blur.png)) | ![二值化]([image/Binarization.png](https://raw.githubusercontent.com/masddffee/Smart-microwave-oven/main/project/image/Binarization.png)) |
 
 
 ### 3. 即時性要求
