@@ -39,7 +39,7 @@ project/
 │   ├── mnist_model.h5     # Keras模型檔案
 │   ├── mnist_model.keras  # Keras原生格式
 │   ├── mnist_model.tflite # TensorFlow Lite壓縮模型
-│   └── mnist_knn.xml      # KNN模型配置
+│   
 ├── assets/                # 資源檔案
 │   ├── Consolas.ttf       # 字型檔案
 │   └── consolaz.ttf       # 字型檔案
